@@ -1,0 +1,31 @@
+@use "./variables" as *;
+
+@mixin card {
+  background: $card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+}
+
+@mixin gradient-button {
+  background: linear-gradient(90deg, $primary-1, $primary-2);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 22px;
+  font-weight: 600;
+  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+  &:hover { transform: translateY(-1px); }
+  &:disabled { opacity: .6; pointer-events: none; }
+}
+
+@mixin skeleton {
+  background: linear-gradient(90deg, #f2f4f8 25%, #e9ecf2 37%, #f2f4f8 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.3s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
