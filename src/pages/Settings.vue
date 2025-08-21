@@ -16,18 +16,18 @@ function onChange(e) {
     <h2 style="margin:0 0 14px 0;">Ayarlar</h2>
 
     <div class="card" style="padding:18px; display:grid; gap:12px;">
-      <div class="title">Veritabanınızı seçebilirsiniz:</div>
+      <div class="title">You may select your database:</div>
       <div class="row">
         <select :value="dbStore.db" @change="onChange"
                 style="padding:10px; border-radius:10px; border:1px solid #e6e8ee; min-width:220px;">
           <option v-for="o in options" :key="o.value" :value="o.value">{{ o.label }}</option>
         </select>
-        <span class="muted">Seçim: <strong>{{ dbStore.db === 'PG' ? 'PostgreSQL' : 'MongoDB' }}</strong></span>
+        <span class="muted">Selection: <strong>{{ dbStore.db === 'PG' ? 'PostgreSQL' : 'MongoDB' }}</strong></span>
       </div>
 
       <div class="hint muted">
-        Bu seçimden sonra <strong>Solver Başlat</strong>, <strong>Eski Planlar</strong> ve
-        <strong>İş Emri Gir</strong> çağrıları otomatik olarak ilgili veritabanına yönlendirilir.
+        After this selection, the <strong>Run Solver</strong>, <strong>Recent Plans</strong> and
+        <strong>Create Order</strong> actions will automatically use the chosen database.
       </div>
     </div>
   </div>

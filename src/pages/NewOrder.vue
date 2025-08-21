@@ -6,7 +6,7 @@ import * as api from "../services/api";
 async function handleSubmit(dto) {
   try {
     await api.createOrder(dto);
-    alert("Veriniz başarıyla sisteme kaydedildi.");
+    alert("Your data has been successfully saved to the system.");
   } catch {
     alert("");
   }
@@ -15,7 +15,7 @@ async function handleSubmit(dto) {
 
 <template>
   <div class="container">
-    <h2 style="margin:0 0 14px 0;">İş Emri Gir</h2>
+    <h2 style="margin:0 0 14px 0;">Create Order</h2>
     <OrderForm @submit="handleSubmit"/>
   </div>
 </template>

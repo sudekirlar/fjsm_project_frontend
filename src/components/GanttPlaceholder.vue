@@ -1,9 +1,11 @@
 <script setup>
+// Dışarıdan bu component'e gelecek ayarları tanımlıyoruz. Bu kutuyu kullanırken şu düğmelerin var diyoruz aslında.
+// İçindeki her satır bir prop'tur.
 const props = defineProps({
-  emptyText: { type: String, default: "⌛" },
-  loading:   { type: Boolean, default: false },
-  height:    { type: [Number, String], default: 640 }, // px veya '70vh'
-  dense:     { type: Boolean, default: true },
+  emptyText: { type: String, default: "⌛" }, // Türü string, eğer kullanıcı bir şey vermezse ikon gözükecek. (Henüz veri yokken)
+  loading:   { type: Boolean, default: false }, // Yükleniyor mu, varsayılan olarak kapalı tutuyoruz.
+  height:    { type: [Number, String], default: 640 }, // Genişliği eğer sayı verirsen px kabul ediyor. Eğer string verirsen metnin yüksekliğini.
+  dense:     { type: Boolean, default: true }, // Sıkıştırma için, padding'i biraz kıstık.
 });
 </script>
 

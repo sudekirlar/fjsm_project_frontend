@@ -1,24 +1,23 @@
 <script setup>
 import { reactive, computed, watch } from "vue";
 
-const emits = defineEmits(["submit"]);
+const emits = defineEmits(["submit"]); // Form tamamlandı sinyali
 
-const JOB_TYPE_OPTIONS = [
-  { label: "kesme", value: "kesme" },
-  { label: "oyma", value: "oyma" },
-  { label: "bükme", value: "bükme" },
-  { label: "yanak açma", value: "yanak_açma" },
+const JOB_TYPE_OPTIONS = [ // label kullanıcıya görünür.
+  { label: "cutting", value: "kesme" },
+  { label: "carving", value: "oyma" },
+  { label: "bending", value: "bükme" },
+  { label: "angle in angle out", value: "yanak_açma" },
 ];
 
-const MACHINES = {
+const MACHINES = { // Makine tanımları, bunu veritabanına alarak genel yönetmek en iyi pratik olacaktır. İleriye notumdur. (Geliştirilebilecekler listesi)
   kesme: Array.from({ length: 20 }, (_, i) => `K#${i + 1}`),
   oyma: Array.from({ length: 9 },  (_, i) => `O#${i + 1}`),
   bükme: Array.from({ length: 6 },  (_, i) => `B#${i + 1}`),
   yanak_açma: Array.from({ length: 6 },  (_, i) => `Y#${i + 1}`),
 };
 
-const DEFAULT_DEADLINE = 10000; // Şimdilik sabit olarak gönderilecek
-
+const DEFAULT_DEADLINE = 10000;
 
 const form = reactive({
   packageId: "",
@@ -31,9 +30,9 @@ const form = reactive({
 });
 
 
-const intRe = /^\d+$/;
+const intRe = /^\d+$/; // Sadece rakamları algılayan bir regex. Tam sayı kontrolü için.
 
-const errors = reactive({
+const errors = reactive({ // Hata mesajları için obje tanımlıyoruz.
   packageId: "",
   jobId: "",
   jobType: "",
@@ -41,36 +40,36 @@ const errors = reactive({
   phase: "",
 });
 
-const isValid = computed(() => {
-  if (!form.packageId) errors.packageId = "Gerekli.";
-  else if (!intRe.test(form.packageId)) errors.packageId = "Sadece tam sayı girin.";
+const isValid = computed(() => { // Kısıt 1: Package ID tam sayı olmalı.
+  if (!form.packageId) errors.packageId = "Required";
+  else if (!intRe.test(form.packageId)) errors.packageId = "Please enter an integer only.";
   else errors.packageId = "";
 
-  if (!form.jobId) errors.jobId = "Gerekli.";
-  else if (!intRe.test(form.jobId)) errors.jobId = "Sadece tam sayı girin.";
+  if (!form.jobId) errors.jobId = "Required"; // Kısıt 2: Job ID tam sayı olmalı.
+  else if (!intRe.test(form.jobId)) errors.jobId = "Please enter an integer only.";
   else errors.jobId = "";
 
-  errors.jobType = form.jobType ? "" : "Gerekli.";
+  errors.jobType = form.jobType ? "" : "Required"; // Kısıt 3: Job Type seçilmeli.
 
-  if (form.mode === "split") {
+  if (form.mode === "split") { // Kısıt 4: Eğer split seçilmişse count seçilmeli ve tam sayı olmalı.
     const n = Number(form.count);
-    if (!form.count) errors.count = "Zorunlu.";
-    else if (!intRe.test(form.count) || n < 1) errors.count = "Geçerli bir sayı (≥1) girin.";
+    if (!form.count) errors.count = "Required";
+    else if (!intRe.test(form.count) || n < 1) errors.count = "Please enter a valid number (≥1).";
     else errors.count = "";
   } else {
     errors.count = "";
   }
 
-  if (!form.phase) errors.phase = "Zorunlu.";
-  else if (!intRe.test(form.phase) || Number(form.phase) < 1) errors.phase = "Geçerli bir sayı (≥1) girin.";
+  if (!form.phase) errors.phase = "Required"; // Kısıt 5: Order girilmeli ve tam sayı olmalı.
+  else if (!intRe.test(form.phase) || Number(form.phase) < 1) errors.phase = "Please enter a valid number (≥1).";
   else errors.phase = "";
 
-  return !errors.packageId && !errors.jobId && !errors.jobType && !errors.count && !errors.phase;
+  return !errors.packageId && !errors.jobId && !errors.jobType && !errors.count && !errors.phase; // Eğer hiç hata yoksa True döner.
 });
 
-const submitting = reactive({ v: false });
+const submitting = reactive({ v: false }); // Şartlar sağlanana kadar butonumuza basılamaz.
 
-watch(() => form.jobType, () => { form.eligible = []; });
+watch(() => form.jobType, () => { form.eligible = []; }); // İş türü değiştiğinde eligible_machines'i seçilen türe göre güncelliyoruz.
 
 const eligibleOptions = computed(() => {
   if (!form.jobType) return [];
@@ -86,7 +85,7 @@ function onSubmit() {
 
   submitting.v = true;
 
-  const payload = {
+  const payload = { // Gönderim için atamalarımızı yapıyoruz.
     package_id: Number(form.packageId),
     job_id: Number(form.jobId),
     job_type: form.jobType,
@@ -97,9 +96,9 @@ function onSubmit() {
     deadline: DEFAULT_DEADLINE,
   };
 
-  emits("submit", payload);
+  emits("submit", payload); // Form verisini sinyalliyoruz.
 
-  setTimeout(() => {
+  setTimeout(() => { // Küçük bir gecikmeyle formu sıfırlıyoruz ve resetliyoruz.
     submitting.v = false;
     form.packageId = "";
     form.jobId = "";
@@ -116,21 +115,21 @@ function onSubmit() {
   <form class="card form" @submit.prevent="onSubmit">
     <div class="form-grid">
       <div class="field">
-        <label for="packageId">Paket ID</label>
-        <input id="packageId" v-model.trim="form.packageId" placeholder="Örn: 1"/>
+        <label for="packageId">Package ID</label>
+        <input id="packageId" v-model.trim="form.packageId" placeholder="Ex: 1"/>
         <p v-if="errors.packageId" class="err">{{ errors.packageId }}</p>
       </div>
 
       <div class="field">
-        <label for="jobId">İş ID</label>
+        <label for="jobId">Job ID</label>
         <input id="jobId" v-model.trim="form.jobId" placeholder="Örn: 10"/>
         <p v-if="errors.jobId" class="err">{{ errors.jobId }}</p>
       </div>
 
       <div class="field">
-        <label for="jobType">İş Türü</label>
+        <label for="jobType">Job Type</label>
         <select id="jobType" v-model="form.jobType">
-          <option value="" disabled>Seçin…</option>
+          <option value="" disabled>Select...</option>
           <option v-for="opt in JOB_TYPE_OPTIONS" :key="opt.value" :value="opt.value">
             {{ opt.label }}
           </option>
@@ -159,25 +158,25 @@ function onSubmit() {
       </div>
 
       <div class="field">
-        <label for="phase">Faz (order)</label>
+        <label for="phase">Order</label>
         <input id="phase" v-model.trim="form.phase" placeholder="Örn: 1"/>
         <p v-if="errors.phase" class="err">{{ errors.phase }}</p>
       </div>
 
       <div class="field field-span2">
-        <label for="eligible">Tercih Edilen Makineler</label>
+        <label for="eligible">Preferred Machines</label>
         <select id="eligible" v-model="form.eligible" multiple size="6">
           <option v-for="m in eligibleOptions" :key="m" :value="m">{{ m }}</option>
         </select>
         <small class="hint">
-          İş türüne göre makine listesi güncellenir. Seçmezseniz solver uygun makineleri seçecek.
+          The machine list will be updated based on the selected task type. If no selection is made, the solver will assign suitable machines automatically.
         </small>
       </div>
     </div>
 
     <div class="actions">
       <button class="btn" :disabled="submitting.v || !isValid">
-        {{ submitting.v ? "Kaydediliyor…" : "Kaydet" }}
+        {{ submitting.v ? "Saving…" : "Save" }}
       </button>
     </div>
   </form>

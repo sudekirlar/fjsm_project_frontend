@@ -13,19 +13,19 @@ const route = useRoute();
 
         <nav class="nav">
           <RouterLink to="/" class="nav-link" :class="{ active: route.path==='/' }">
-            🖥️ Ana Sayfa
+            🖥️ Main Page
           </RouterLink>
 
           <RouterLink to="/orders/new" class="nav-link" :class="{ active: route.path.startsWith('/orders') }">
-            🧾 İş Emri Gir
+            🧾 Create Order
           </RouterLink>
 
           <RouterLink to="/plans" class="nav-link" :class="{ active: route.path.startsWith('/plans') }">
-            📜 Eski Planlar
+            📜 Recent Plans
           </RouterLink>
 
           <RouterLink to="/settings" class="nav-link" :class="{ active: route.path.startsWith('/settings') }">
-            ⚙️ Ayarlar
+            ⚙️ Settings
             <span class="chip">{{ dbStore.db }}</span>
           </RouterLink>
         </nav>
@@ -37,18 +37,18 @@ const route = useRoute();
         <div class="topbar-title">
           {{
             route.name === 'home'
-              ? 'Ana Sayfa'
+              ? 'Home Page'
               : route.name === 'plans'
-                ? 'Eski Planlar'
+                ? 'Recent Plans'
                 : route.name === 'new-order'
-                  ? 'İş Emri Gir'
+                  ? 'Create Order'
                   : route.name === 'settings'
-                    ? 'Ayarlar'
+                    ? 'Settings'
                     : ''
           }}
         </div>
         <div class="topbar-actions">
-          <span class="hello">Hoşgeldiniz!</span>
+          <span class="hello">Welcome!</span>
         </div>
       </div>
 

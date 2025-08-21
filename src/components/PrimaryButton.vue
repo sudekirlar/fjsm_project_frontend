@@ -4,7 +4,7 @@ defineProps({
   loading: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
 });
-defineEmits(["click"]);
+defineEmits(["click"]); // Biri düğmeye bastığında sinyallemek için tanımlamamız.
 </script>
 
 <template>
@@ -13,7 +13,7 @@ defineEmits(["click"]);
     :disabled="disabled || loading"
     @click="$emit('click')"
   >
-    <span v-if="loading">⌛ Yükleniyor…</span>
+    <span v-if="loading">⌛ Loading…</span>
     <span v-else>{{ label }}</span>
   </button>
 </template>

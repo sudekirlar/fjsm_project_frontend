@@ -1,20 +1,21 @@
 import { dbStore } from "../stores/dbStore";
 
-const API_BASE_URL = "http://localhost:5000";
+const API_BASE_URL = "http://localhost:5000"; // Tüm isteklerin gideceği ana URL.
 
-function withDb(path) {
+function withDb(path) { // Tüm endpointlere seçili veritabanını ekliyoruz.
   const db = (dbStore.db || "PG").toLowerCase();
-  const sep = path.includes("?") ? "&" : "?";
-  return `${path}${sep}db=${db}`;
+  const sep = path.includes("?") ? "&" : "?"; // Path’te zaten ? varsa &, yoksa ? kullanıyoruz.
+  return `${path}${sep}db=${db}`; // Sonuç: /api/solver/start?db=pg gibi olmuş olacak.
 }
 
-function headers(json = false) {
+function headers(json = false) { // Her istek için ortak header'ları üretiyoruz.
   const h = {};
   if (json) h["Content-Type"] = "application/json";
-  h["X-DB"] = dbStore.db; // PG | MONGO
+  h["X-DB"] = dbStore.db; // PG, MONGO
   return h;
 }
 
+// Buradaki endpointler için dökümantasyon incelenebilir.
 export async function startSolver() {
   const response = await fetch(`${API_BASE_URL}${withDb("/api/solver/start")}`, {
     method: "POST",

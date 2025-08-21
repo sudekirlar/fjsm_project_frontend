@@ -15,8 +15,8 @@ const ganttItems = ref([]);
 
 onMounted(async () => {
   try {
-    const list = await api.getRecentPlans();
-    plans.value = Array.isArray(list) ? list : [];
+    const list = await api.getRecentPlans(); // Son planları çek.
+    plans.value = Array.isArray(list) ? list : []; // Listeye koy. Yoksa boş liste yap.
   } catch {
     plans.value = [];
   } finally {
@@ -24,11 +24,11 @@ onMounted(async () => {
   }
 });
 
-async function onChange(id) {
-  selected.value = id;
-  ganttItems.value = [];
-  if (!id) return;
-  ganttLoading.value = true;
+async function onChange(id) { // PlanSelect bir ID gönderdiğinde
+  selected.value = id; // selected'ı güncelle.
+  ganttItems.value = []; // eski Gantt'ı temizle.
+  if (!id) return; // Boş seçim ise dur.
+  ganttLoading.value = true; // Değilse o planı çekelim.
   try {
     const data = await api.getPlanGantt(id);
     ganttItems.value = Array.isArray(data) ? data : [];
@@ -43,11 +43,11 @@ async function onChange(id) {
     <div>
       <PlanSelect :options="plans" :loading="loading" @change="onChange" />
       <div class="muted" style="margin-top:8px; font-size:12px;">
-        Son 10 plan listelenir. Bir plan seçtiğinde Gantt grafiği sağda yüklenir.
+        The last 10 plans are listed. When you select a plan, its Gantt chart will be loaded on the right.
       </div>
     </div>
 
-    <GanttPlaceholder :loading="ganttLoading" emptyText="Seçilen plana ait Gantt burada görünecek." height="680">
+    <GanttPlaceholder :loading="ganttLoading" emptyText="The Gantt chart for the selected plan will be displayed here." height="680">
       <template #toolbar>
         <div class="toolbar-left">
           <strong>Plan Gantt</strong>

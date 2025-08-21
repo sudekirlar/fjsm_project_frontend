@@ -1,7 +1,7 @@
 <script setup>
-import { computed } from "vue";
+import { computed } from "vue"; // Girdi değişince kendini otomatik yeniden hesaplar.
 
-const props = defineProps({
+const props = defineProps({ // Bileşenin dışarıdan alacağı prop'lar
   title:   { type: String,  required: true },
   value:   { type: [String, Number], default: "" },
   subtitle:{ type: String,  default: "" },
@@ -10,9 +10,9 @@ const props = defineProps({
   icon:    { type: String,  default: "status" },
 });
 
-const statusClass = computed(() => {
+const statusClass = computed(() => { // status yazısını alıp, lower case yapıp return ediyoruz ilgili durumu.
   const s = (props.status || "").toLowerCase();
-  if (s === "optimal")   return "success";
+  if (s === "optimal")   return "success"; // Tek bir yerden stil bağlamış olduk.
   if (s === "feasible")  return "warning";
   if (s === "infeasible")return "danger";
   return "";
